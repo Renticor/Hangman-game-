@@ -1,0 +1,8 @@
+build-Hangman-game-min-Debug/Makefile
+build-Hangman-game-min-Debug/Makefile.Debug
+build-Hangman-game-min-Debug/Makefile.Release
+build-Hangman-game-min-Debug/debug/main.o
+build-Hangman-game-min-Debug/debug/mainwindow.o
+build-Hangman-game-min-Debug/debug/moc_mainwindow.cpp
+build-Hangman-game-min-Debug/debug/moc_mainwindow.o
+build-Hangman-game-min-Debug/ui_mainwindow.h
