@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    hangman man;
+
     void wisielec(unsigned);
     void restartButton(bool);
     void wygrana();
@@ -88,6 +88,7 @@ private slots:
     void on_Button_rzy_clicked();
 
 private:
+    hangman man;
     Ui::MainWindow *ui;
 };
 

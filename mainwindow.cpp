@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "hangman.h"
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     man.wczytaj();
+    on_Button_Graj_clicked();
    // ui->label_kategoria->setText(QString::number(man.tablicaPlikow.size()));
 
 }
@@ -16,6 +18,7 @@ MainWindow::~MainWindow()
     man.~hangman();
     delete ui;
 }
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 void MainWindow::restartButton(bool _value)
 {
     ui->Button_A->setEnabled(_value);
@@ -51,9 +54,10 @@ void MainWindow::restartButton(bool _value)
     ui->Button_zi->setEnabled(_value);
     ui->Button_rzy->setEnabled(_value);
 }
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
  void MainWindow::wygrana()
  {
-     if(man.czyWygralem()==true && man.getBledy()<6)
+     if(man.czyWygralem()==true)
      {
          QString filename;
          QImage image ;
@@ -71,7 +75,7 @@ void MainWindow::restartButton(bool _value)
          }
 
      }
-     else if (man.getBledy()>=6)
+     else if (man.getBledy()>6)
      {
          QString filename;
          QImage image ;
@@ -218,6 +222,7 @@ void MainWindow::wisielec(unsigned _a)
 }
     default:
     {
+        restartButton(false);
         ui->label_grafika->setText("Nie wczytano defoltowego obrazka");
         break;
 }

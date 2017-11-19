@@ -1,16 +1,16 @@
 #include "hangman.h"
 /***************************************************************************/
-hangman::hangman():bledy(0),tablicaPlikow(),tablicaImion(),kategoria(""),a(-1),c(-1),nie_ukryte(""),ukryte(""),przejsc(0)
+hangman::hangman():bledy(0),tablicaKategori(),tablicaHasel(),kategoria(""),indeksKategoria(-1),indeksHasla(-1),nie_ukryte(""),ukryte("")
 {}
 /***************************************************************************/
 hangman::~hangman()
 {
-    for(unsigned i=0;i<tablicaPlikow.size();++i)
+    for(unsigned i=0;i<tablicaKategori.size();++i)
     {
-        tablicaImion[i].clear();
+        tablicaHasel[i].clear();
     }
-    tablicaImion.clear();
-    tablicaPlikow.clear();
+    tablicaHasel.clear();
+    tablicaKategori.clear();
 }
 /***************************************************************************/
 void hangman::wczytaj()
@@ -26,18 +26,16 @@ void hangman::wczytaj()
 			std::ifstream plik;	//
 			plik.open(b + danePliku.name, std::ios::in);//proba otwarcia pliku
 			if (plik.good()) {//jesli otwarto
-				tablicaPlikow.push_back(danePliku.name);
+                tablicaKategori.push_back(danePliku.name);
 				std::vector< std::string> tmp;
 				while (std::getline(plik, linia)) {//poki jest jakas linia w pliku
-
                     for (unsigned i = 0; i < linia.length(); ++i)
 					{
 						linia[i] = toupper(linia[i]);
 					}
-
 					tmp.push_back(linia);
 				}
-				tablicaImion.push_back(tmp);
+                tablicaHasel.push_back(tmp);
 				plik.close();
 			}
             //std::cout << plik.is_open() << "\t" << std::endl;
@@ -51,20 +49,23 @@ void hangman::losuj()
 {
 	srand(time(NULL));
 
-    a = rand() % tablicaPlikow.size();
-    if(a!=-1){
-	c = rand() % tablicaImion[a].size();
-    if(c!=-1)
+    indeksKategoria = rand() % tablicaKategori.size();
+    if(indeksKategoria!=-1){
+    indeksHasla = rand() % tablicaHasel[indeksKategoria].size();
+    if(indeksHasla!=-1)
     {
-	ukryte = nie_ukryte = tablicaImion[a][c];
+    ukryte = nie_ukryte = tablicaHasel[indeksKategoria][indeksHasla];
     }}
-    else{ukryte = nie_ukryte ="a<0";}
+    else{
+        ukryte = nie_ukryte ="a<0";
+       // break;
+    }
 
     }
 /***************************************************************************/
 void hangman::setKategoria()
 {
-std::string tmp=tablicaPlikow[a];
+std::string tmp=tablicaKategori[indeksKategoria];
 int i=0;
 while(tmp[i]!='.')
 {
@@ -82,20 +83,20 @@ void hangman::ukryj()
 	}
 }
 /***************************************************************************/
-void hangman::graj(char cos)
+void hangman::graj(char _znak)
 {
-	int  czy_zmieniono = 0;
+    int  czyZmieniono = 0;
     for (unsigned i = 0; i < ukryte.length(); ++i)
 	{
-		if ((int)nie_ukryte[i] == (int)cos && ukryte[i] != cos)
+        if ((int)nie_ukryte[i] == (int)_znak && ukryte[i] != _znak)
 		{
-			czy_zmieniono++;
-			ukryte[i] = cos;
+            czyZmieniono++;
+            ukryte[i] = _znak;
 			//std::cout << ukryte[i] << " " << i << " " << abec<< " w " << std::endl;
 		}
 		//std::cout << (int)nie_ukryte[i] << " " << i << " " << (int)abec <<" poza "<<std::endl;
 	}
-	if (czy_zmieniono == 0)
+    if (czyZmieniono == 0)
 	{
         ++bledy;
 	}
@@ -104,7 +105,6 @@ void hangman::graj(char cos)
         //std::cout << ukryte[i] << " ";
 
     //}
-	przejsc += czy_zmieniono;
     //std::cout << "\n";
 }
 /***************************************************************************/
@@ -128,19 +128,18 @@ std::string hangman::getNie_ukryte()
 {
     return nie_ukryte;
 }
-
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
  void hangman::restart()
  {
 bledy=0;
-przejsc=0;
-a=-1;
-c=-1;
+indeksKategoria=-1;
+indeksHasla=-1;
  kategoria="";
  }
-
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 bool hangman::czyWygralem()
 {
-    if(ukryte==nie_ukryte && ukryte!="")
+    if(ukryte==nie_ukryte && ukryte!="" && bledy<6)
         return true;
     return false;
 }
